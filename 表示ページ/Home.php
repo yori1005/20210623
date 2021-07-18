@@ -14,21 +14,24 @@ if(isset($_SESSION['id'])){
     <style>
 		body{
 			margin: 0 auto;
-			width: 60%;
+			width: 100%;
+			background: #E0FFFF;
 		}
         .title {
             border: solid 5px #ffd800;
             text-align: center;
             font-size: 40px;
+			background:#00FFFF;
+			font-family: fantasy;
         }
 
         .text {
             text-align: center;
-            font-size: 20px;
+            font-size: 30px;
         }
 
         section {
-            max-width: 300px;
+            max-width: 400px;
             margin: 0 auto;
         }
 
@@ -45,7 +48,7 @@ if(isset($_SESSION['id'])){
             box-sizing: border-box;
             padding: 0 45px 0 25px;
             color: #fff;
-            font-size: 16px;
+            font-size: 30px;
             letter-spacing: 0.1em;
             line-height: 1.3;
             text-align: left;
@@ -76,23 +79,29 @@ if(isset($_SESSION['id'])){
             border-top: 2px solid #228bc8;
             border-right: 2px solid #228bc8;
         }
+
     </style>
 </head>
 <body>
     <div class="title">
-        <h1>Health Support</h1><p><p>
+        <h1>Health<br> Diet Support<br></h1>
     </div>
+	<br><br>
     <div class="text">
         <h2>新規会員登録はこちら</h2><p>
     </div>
+	<br>
     <section>
         <a href="http://g079ff.php.xdomain.jp/signup_page.php" class="btn_03">新規登録</a>
     </section><p><p>
+	<br><br>
     <div class="text">
         <h2>アカウントをお持ちの方はこちら</h2><p>
     </div>
+	<br>
     <section>
           <a href="http://g079ff.php.xdomain.jp/login_page.php" class="btn_03">ログイン</a>
     </section>
+	<br>
 </body>
 </html>

@@ -1,5 +1,8 @@
 <?php
 session_start();
+if($_SESSION['id'] == NULL){
+    header('Location: http://g079ff.php.xdomain.jp/Home.php');
+}
 $id = $_SESSION['id'];
 $name = $_SESSION['name'];
 $dsn = 'mysql:host=157.112.147.201;
@@ -54,7 +57,7 @@ $json_date = json_encode($weightdate);
     <style>
 		body{
 			margin: 0 auto;
-			width: 95%;
+			width: 100%;
 		}
         .text {
             text-align: left;
@@ -63,7 +66,14 @@ $json_date = json_encode($weightdate);
 		.text2{
 			text-align: center;
 			font-size: 30px;
+			background: #FF6347;
 		}
+		.text3{
+			text-align: center;
+			font-size: 30px;
+			background: #FFFF00;
+		}
+
 
 		.m-form-text {
 			height: 60px;
@@ -141,16 +151,16 @@ $json_date = json_encode($weightdate);
 
 		a.btn_02_a {
 			display: block;
-			color: #fff;
-			font-size: 16px;
+			color: #000000;
+			font-size: 33px;
 			padding: 1.5rem .5rem;
-			background-color: #e22939;
+			background-color: #00FFFF;
 			text-align: center;
 			text-decoration: none;
 			transition-duration: 0.3s;
 		}
 		a.btn_02_a:hover {
-			background: #000000;
+			background: #00FFFF;
 		}
 		a.btn_02_a span {
 			position: relative;
@@ -160,7 +170,7 @@ $json_date = json_encode($weightdate);
 			content: '';
 			width: 26px;
 			height: 26px;
-			background: #ffffff;
+			background: #00FFFF;
 			border-radius: 50%;
 			position: absolute;
 			top: 50%;
@@ -193,7 +203,7 @@ $json_date = json_encode($weightdate);
 			cursor        : pointer;     /* カーソル   */
 			padding       : 12px 30px;   /* 余白       */
 			background    : #6666ff;     /* 背景色     */
-			color         : #ffffff;     /* 文字色     */
+			color         : #000000;     /* 文字色     */
 			line-height   : 1em;         /* 1行の高さ  */
 			transition    : .3s;         /* なめらか変化 */
 			box-shadow    : 6px 6px 3px #666666;  /* 影の設定 */
@@ -202,13 +212,13 @@ $json_date = json_encode($weightdate);
 		.submitbutton:hover {
 			box-shadow    : none;        /* カーソル時の影消去 */
 			color         : #6666ff;     /* 背景色     */
-			background    : #ffffff;     /* 文字色     */
+			background    : #000000;    /* 文字色     */
 		}
 
 		.grovalNavigation{
-			height: 10%;
+			height: 30%;
 			text-align: center;
-			background-color: #888;
+			background-color: #000000;
 			color: #fff;
 		}
 		main{
@@ -218,7 +228,7 @@ $json_date = json_encode($weightdate);
 		}
 		.content{
 			flex: 1;
-		    background-color: #eee;
+		    background-color: #E0FFFF;
 			text-align: center;
 			margin-left: 10px;
 		}
@@ -227,20 +237,20 @@ $json_date = json_encode($weightdate);
 		    width: 20%;
 		    text-align: center;
 			vertical-align: middle;
-		    background-color: #888;
+		    background-color: #000000;
 			color: #fff;
 		}
     </style>
-    <title></title>
+    <title>マイページ</title>
 </head>
 <body>
 	<header class="grovalNavigation">
 		<div class="title">
-		<p class="name"><h2>
+		<p class="name"><h1>
 			<?php
-				printf("\nようこそ。 %s さん。ID %s",$name,$id)
+				printf("\n %s さん。ようこそ！ID：%s",$name,$id)
 			?>
-		</h2></p>
+		</h1></p>
 		<p class="button"><section>
 			<a href="http://g079ff.php.xdomain.jp/logout.php" class="btn_03">ログアウト</a>
 		</section></p>
@@ -249,6 +259,7 @@ $json_date = json_encode($weightdate);
 
 	<main>
 		<div class="localNavigation">
+			<br><br><br><br><br><br><br><br><br><br>
 			<table align="center">
 				<tr>
 					<td><a href="http://g079ff.php.xdomain.jp/search_page.php" class="btn_02_a">検索</a></td>
@@ -262,7 +273,7 @@ $json_date = json_encode($weightdate);
 			</table>
 		</div>
 		<div class="content">
-			<table width="700px" border="1">
+			<table width="700px" border="1" align="center">
 				<tr>
 					<td><div class="text">画像をタップでアイコンを変更</div></td>
 				</tr>
@@ -317,7 +328,15 @@ $json_date = json_encode($weightdate);
 				});
 			</script>
 			<br><br><br>
-			<table width="700px" border="1">
+			<?php if($flag == 1){ ?>
+				<div class="text2"><?php echo 昨日より体重が増えています！ ?></div>
+				<?php } ?>
+			<?php if($flag == 2){ ?> 
+				<div class="text3"><?php echo 昨日より体重が減っています！ ?></div>
+				<?php } ?>
+
+				<br><br><br>
+			<table width="500px" border="1" align="center">
 				<tr>
 					<td><div class="text2">毎日の体重を記録できます。</div></td>
 				</tr>
@@ -330,13 +349,7 @@ $json_date = json_encode($weightdate);
 				</tr>
 				</form>
 			</table>
-			<?php if($flag == 1){ 
-				echo 昨日より体重が増えています;
-				} ?>
-			<?php if($flag == 2){ 
-				echo 昨日より体重が減っています;
-				 } ?>
-
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		</div>
 	</main>
 

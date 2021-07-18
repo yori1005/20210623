@@ -1,5 +1,8 @@
 <?php
 session_start();
+if($_SESSION['id'] == NULL){
+    header('Location: http://g079ff.php.xdomain.jp/Home.php');
+}
 $id = $_SESSION['id'];
 $name = $_SESSION['name'];
 $searchword = $_SESSION['searchword'];
@@ -11,7 +14,7 @@ $searchword = $_POST['searchword'];
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>検索画面</title>
     <style>
 		body {
             margin: 0 auto;
@@ -117,94 +120,107 @@ $searchword = $_POST['searchword'];
                 }
 
 
-        a.btn_02_a {
-            display: block;
-            color: #fff;
-            font-size: 16px;
-            padding: 1.5rem .5rem;
-            background-color: #e22939;
-            text-align: center;
-            text-decoration: none;
-            transition-duration: 0.3s;
-        }
+		a.btn_02_a {
+			display: block;
+			color: #000000;
+			font-size: 33px;
+			padding: 1.5rem .5rem;
+			background-color: #00FFFF;
+			text-align: center;
+			text-decoration: none;
+			transition-duration: 0.3s;
+		}
+		a.btn_02_a:hover {
+			background: #00FFFF;
+		}
+		a.btn_02_a span {
+			position: relative;
+			padding-left: 36px;
+		}
+		a.btn_02_a span:before {
+			content: '';
+			width: 26px;
+			height: 26px;
+			background: #00FFFF;
+			border-radius: 50%;
+			position: absolute;
+			top: 50%;
+			left: 0;
+			margin-top: -13px;
+		}
+		a.btn_02_a span:after {
+			content: '';
+			width: 6px;
+			height: 6px;
+			border: 0;
+			border-top: 3px solid #e22939;
+			border-right: 3px solid #e22939;
+			transform: rotate(45deg);
+			position: absolute;
+			top: 50%;
+			left: 7px;
+			margin-top: -5px;
+		}
+		a.btn_02_a:hover span:after {
+			border-top: 3px solid #000000;
+			border-right: 3px solid #000000;
+		}
 
-            a.btn_02_a:hover {
-                background: #000000;
-            }
+		.submitbutton {
+			display       : inline-block;
+			border-radius : 20%;          /* 角丸       */
+			font-size     : 15pt;        /* 文字サイズ */
+			text-align    : center;      /* 文字位置   */
+			cursor        : pointer;     /* カーソル   */
+			padding       : 12px 30px;   /* 余白       */
+			background    : #6666ff;     /* 背景色     */
+			color         : #000000;    /* 文字色     */
+			line-height   : 1em;         /* 1行の高さ  */
+			transition    : .3s;         /* なめらか変化 */
+			box-shadow    : 6px 6px 3px #666666;  /* 影の設定 */
+			border        : 2px solid #6666ff;    /* 枠の指定 */
+		}
+		.submitbutton:hover {
+			box-shadow    : none;        /* カーソル時の影消去 */
+			color         : #6666ff;     /* 背景色     */
+			background    : #000000;    /* 文字色     */
+		}
 
-            a.btn_02_a span {
-                position: relative;
-                padding-left: 36px;
-            }
+		.grovalNavigation{
+			height: 30%;
+			text-align: center;
+			background-color: #000000;
+			color: #fff;
+		}
+		main{
+			min-height: 100vh;
+			display: flex;
+			margin-top: 10px;
+		}
+		.content{
+			flex: 1;
+		    background-color: #E0FFFF;
+			text-align: center;
+			margin-left: 10px;
+		}
 
-                a.btn_02_a span:before {
-                    content: '';
-                    width: 26px;
-                    height: 26px;
-                    background: #ffffff;
-                    border-radius: 50%;
-                    position: absolute;
-                    top: 50%;
-                    left: 0;
-                    margin-top: -13px;
-                }
-
-                a.btn_02_a span:after {
-                    content: '';
-                    width: 6px;
-                    height: 6px;
-                    border: 0;
-                    border-top: 3px solid #e22939;
-                    border-right: 3px solid #e22939;
-                    transform: rotate(45deg);
-                    position: absolute;
-                    top: 50%;
-                    left: 7px;
-                    margin-top: -5px;
-                }
-
-            a.btn_02_a:hover span:after {
-                border-top: 3px solid #000000;
-                border-right: 3px solid #000000;
-            }
-
-        .grovalNavigation {
-            height: 10%;
-            text-align: center;
-            background-color: #888;
-            color: #fff;
-        }
-
-        main {
-            min-height: 100vh;
-            display: flex;
-            margin-top: 10px;
-        }
-
-        .content {
-            flex: 1;
-            background-color: #eee;
-            text-align: center;
-            margin-left: 10px;
-        }
-
-        .localNavigation {
-            width: 20%;
-            text-align: center;
-            vertical-align: middle;
-            background-color: #888;
-            color: #fff;
-        }
+		.localNavigation{
+		    width: 20%;
+		    text-align: center;
+			vertical-align: middle;
+		    background-color: #000000;
+			color: #fff;
+		}
 	</style>
 </head>
 <body>
 	<header class="grovalNavigation">
 		<div class="title">
-		<p class="name"><h2>
+		<p class="name"><h1>
 			<?php
-				printf("\nようこそ。 %s さん。ID %s",$name,$id)
+				printf("検索")
 			?>
-		</h2></p>
+		</h1></p>
 		<p class="button"><section>
 			<a href="http://g079ff.php.xdomain.jp/logout.php" class="btn_03">ログアウト</a>
 		</section></p>
@@ -213,6 +229,7 @@ $searchword = $_POST['searchword'];
 
 	<main>
 		<div class="localNavigation">
+					<br><br><br><br><br><br><br><br><br><br>
 			<table align="center">
 				<tr>
 					<td><a href="http://g079ff.php.xdomain.jp/search_page.php" class="btn_02_a">検索</a></td>
@@ -231,7 +248,7 @@ $searchword = $_POST['searchword'];
 			<h1>検索画面</h1>
 			<form action = "search_page.php" method = "post">
 			<input type="text" name="searchword" value="<?php echo $searchword ?>" placeholder="検索" class="form">
-			<input type="submit" value="検索">
+			<input type="submit" value="検索" class="submitbutton">
 			</form>
 			<br><br><br>
 
@@ -269,7 +286,7 @@ $searchword = $_POST['searchword'];
 			<form method="post" action="detail_page.php">
 			<input type="hidden" name="key<?php echo $k ?>" value="<?php echo $recipename[$k] ?>">
 			<input type="hidden" name="sword" value="<?php echo $word ?>">
-			<input type="submit" value="レシピの詳細を見る">
+			<input type="submit" value="レシピの詳細を見る" class="submitbutton">
 			</form>
 			
             <table class="table" border="1">
