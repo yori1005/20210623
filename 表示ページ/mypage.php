@@ -12,12 +12,39 @@ $option = [PDO::ATTR_EMULATE_PREPARES=>false];
 		}catch(PDOException $e){
     		echo 'データベースにアクセスできません' . $e->getMessage();
 			exit;
-	 	}
-	    $sql = "SELECT * FROM user WHERE id = '$id'";
-       	$stmt = $dbh->query($sql);
-		foreach($stmt as $row){
-			$comment = $row['comment']; $birth = $row['birth']; $image = $row['image'];
-        }
+	}
+$sql = "SELECT * FROM user WHERE id = '$id'";
+$stmt = $dbh->query($sql);
+foreach($stmt as $row){
+	$comment = $row['comment']; $birth = $row['birth']; $image = $row['image'];
+}
+
+$sql = "SELECT * FROM weight WHERE id = '$id' ORDER BY num DESC";
+$stmt = $dbh->query($sql);
+$i = 0;
+foreach($stmt as $row){
+	$dbw[$i] = $row['weight']; $wdate[$i] = $row['wdate'];
+	$i++;
+}
+$l = 0;
+for($k=($i-1);$k>=0;$k--){
+	$weightdate[$l] = date('Y-m-d',strtotime($wdate[$k]));
+	$dbweight[$l] = $dbw[$k];
+	$l++;
+}
+
+$s = $l - 1;
+
+if((double)$dbw[0] > (double)$dbw[1]){
+	$flag = 1;
+}
+elseif((double)$dbw[0] < (double)$dbw[1]){
+	$flag = 2;
+}
+
+$json_weight = json_encode($dbweight);
+$json_date = json_encode($weightdate);
+
 ?>
 <!DOCTYPE html>
 
@@ -27,12 +54,35 @@ $option = [PDO::ATTR_EMULATE_PREPARES=>false];
     <style>
 		body{
 			margin: 0 auto;
-			width: 60%;
+			width: 95%;
 		}
         .text {
-            text-align: center;
-            font-size: 20px;
+            text-align: left;
+            font-size: 30px;
         }
+		.text2{
+			text-align: center;
+			font-size: 30px;
+		}
+
+		.m-form-text {
+			height: 60px;
+			width: 200px;
+			padding: 0 16px;
+			border-radius: 4px;
+			border: none;
+			box-shadow: 0 0 0 1px #ccc inset;
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			font-size: 30px;
+			text-align: center;
+		}
+
+		.m-form-text:focus {
+			outline: 0;
+			box-shadow: 0 0 0 2px rgb(33, 150, 243) inset;
+		}
 
         section {
             max-width: 250px;
@@ -135,6 +185,26 @@ $option = [PDO::ATTR_EMULATE_PREPARES=>false];
 			border-right: 3px solid #000000;
 		}
 
+		.submitbutton {
+			display       : inline-block;
+			border-radius : 20%;          /* 角丸       */
+			font-size     : 15pt;        /* 文字サイズ */
+			text-align    : center;      /* 文字位置   */
+			cursor        : pointer;     /* カーソル   */
+			padding       : 12px 30px;   /* 余白       */
+			background    : #6666ff;     /* 背景色     */
+			color         : #ffffff;     /* 文字色     */
+			line-height   : 1em;         /* 1行の高さ  */
+			transition    : .3s;         /* なめらか変化 */
+			box-shadow    : 6px 6px 3px #666666;  /* 影の設定 */
+			border        : 2px solid #6666ff;    /* 枠の指定 */
+		}
+		.submitbutton:hover {
+			box-shadow    : none;        /* カーソル時の影消去 */
+			color         : #6666ff;     /* 背景色     */
+			background    : #ffffff;     /* 文字色     */
+		}
+
 		.grovalNavigation{
 			height: 10%;
 			text-align: center;
@@ -192,9 +262,12 @@ $option = [PDO::ATTR_EMULATE_PREPARES=>false];
 			</table>
 		</div>
 		<div class="content">
-			<table width="300px">
+			<table width="700px" border="1">
 				<tr>
-					<td><a href="http://g079ff.php.xdomain.jp/changeicon_page.php"><img src="images/<?php echo $image ?>" width="200" height="200"></a></td>
+					<td><div class="text">画像をタップでアイコンを変更</div></td>
+				</tr>
+				<tr>
+					<td><a href="http://g079ff.php.xdomain.jp/changeicon_page.php"><img src="images/<?php echo $image ?>" width="400" height="400"></a></td>
 				</tr>
 				<tr>
 					<td><div class="text"><?php printf("名前 : %s",$name); ?></div></td>
@@ -214,6 +287,56 @@ $option = [PDO::ATTR_EMULATE_PREPARES=>false];
 					</section></td>
 				</tr>
 			</table>
+			<br><br><br>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.js" integrity="sha512-lUsN5TEogpe12qeV8NF4cxlJJatTZ12jnx9WXkFXOy7yFbuHwYRTjmctvwbRIuZPhv+lpvy7Cm9o8T9e+9pTrg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+			<canvas id="myChart" width="400" height="400"></canvas>
+			<script>
+				var i = <?php echo $i; ?>;
+				var weight = <?php echo $json_weight; ?>;
+				var wdate = <?php echo $json_date; ?>;
+				
+				var ctx = document.getElementById('myChart').getContext('2d');
+				var data = {
+					labels: wdate,
+					datasets: [{
+						label: '体重',
+						data: weight,
+						borderColor: 'rgba(255, 100, 100, 1)',
+						lineTension: 0,
+						fill: false,
+						borderWidth: 3
+					}]
+				};
+
+				var options = {};
+
+				var myChart = new Chart(ctx, {
+					type: 'line',
+					data: data,
+					options: options
+				});
+			</script>
+			<br><br><br>
+			<table width="700px" border="1">
+				<tr>
+					<td><div class="text2">毎日の体重を記録できます。</div></td>
+				</tr>
+				<form action="weight.php" method="post" enctype="multipart/form-data">
+				<tr>
+					<td><input type="text" name="weight" placeholder="体重を記入" class="m-form-text"></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="記録！"class="submitbutton"></td>
+				</tr>
+				</form>
+			</table>
+			<?php if($flag == 1){ 
+				echo 昨日より体重が増えています;
+				} ?>
+			<?php if($flag == 2){ 
+				echo 昨日より体重が減っています;
+				 } ?>
+
 		</div>
 	</main>
 

@@ -2,10 +2,51 @@
 session_start();
 $id = $_SESSION['id'];
 $name = $_SESSION['name'];
-$searchword = $_SESSION['searchword'];
-$searchword = $_POST['searchword'];
-?>
+for($i=0;$i<50;$i++){
+$keyword = "key".$i;
+if($_POST[$keyword] != NULL){
+    $key = $_POST[$keyword];
+}
+}
 
+$dsn = 'mysql:host=157.112.147.201;
+        dbname=g079ff_2020';
+$user =  'g079ff_ymgc';
+$pass = 'kpEYZ8KU';
+try {
+    $dbh = new PDO($dsn, $user, $pass);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
+
+$sql = "SELECT * FROM post WHERE recipename = '$key' AND id = '$id'";
+$stmt = $dbh->query($sql);
+$i = 0;
+foreach($stmt as $row){
+    $postnum = $row['num']; $postname = $row['name'];
+    $postid = $row['id'];   $postdatetime = $row['datetime'];
+    $recipename = $row['recipename']; $recipecomment = $row['recipecomment'];
+    $calorie = $row['calorie']; $foodimage = $row['foodimage'];
+    $i++;
+}
+
+$sql = "SELECT * FROM foodstuff WHERE recipename = '$key' AND id = '$id'";
+$stmt = $dbh->query($sql);
+$i = 0;
+foreach($stmt as $row){
+    $food1 = $row['food1']; $volfood1 = $row['volfood1'];
+    $food2 = $row['food2']; $volfood2 = $row['volfood2'];
+    $food3 = $row['food3']; $volfood3 = $row['volfood3'];
+    $food4 = $row['food4']; $volfood4 = $row['volfood4'];
+    $food5 = $row['food5']; $volfood5 = $row['volfood5'];
+    $food6 = $row['food6']; $volfood6 = $row['volfood6'];
+    $food7 = $row['food7']; $volfood7 = $row['volfood7'];
+    $food8 = $row['food8']; $volfood8 = $row['volfood8'];
+    $food9 = $row['food9']; $volfood9 = $row['volfood9'];
+    $food10 = $row['food10']; $volfood10 = $row['volfood10'];
+}
+
+?>
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -13,7 +54,7 @@ $searchword = $_POST['searchword'];
     <meta charset="utf-8" />
     <title></title>
     <style>
-		body {
+        body {
             margin: 0 auto;
             width: 100%;
         }
@@ -31,25 +72,6 @@ $searchword = $_POST['searchword'];
         .table td{
             word-wrap: break-word;
         }
-
-		.form {
-			height: 40px;
-			width: 300px;
-			padding: 0 16px;
-			border-radius: 4px;
-			border: none;
-			box-shadow: 0 0 0 1px #ccc inset;
-			appearance: none;
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			font-size: 20px;
-			text-align: center;
-		}
-
-		.form:focus {
-			outline: 0;
-			box-shadow: 0 0 0 2px rgb(33, 150, 243) inset;
-		}
 
         section {
             max-width: 250px;
@@ -195,100 +217,77 @@ $searchword = $_POST['searchword'];
             background-color: #888;
             color: #fff;
         }
-	</style>
+    </style>
 </head>
 <body>
-	<header class="grovalNavigation">
-		<div class="title">
-		<p class="name"><h2>
-			<?php
-				printf("\nようこそ。 %s さん。ID %s",$name,$id)
-			?>
-		</h2></p>
-		<p class="button"><section>
-			<a href="http://g079ff.php.xdomain.jp/logout.php" class="btn_03">ログアウト</a>
-		</section></p>
-		</div>
-	</header>
 
-	<main>
-		<div class="localNavigation">
-			<table align="center">
-				<tr>
-					<td><a href="http://g079ff.php.xdomain.jp/search_page.php" class="btn_02_a">検索</a></td>
-				</tr>
-				<tr>
-					<p><td><a href="http://g079ff.php.xdomain.jp/myrecipe.php" class="btn_02_a">マイレシピ</a></td>
-				</tr>
-				<tr>
-					<p><td><a href="http://g079ff.php.xdomain.jp/mypage.php" class="btn_02_a">マイページ</a></td>
-				</tr>
-			</table>
-		</div>
-		<div class="content">
+    <header class="grovalNavigation">
+        <div class="title">
+            <p class="name">
+                <h2>
+                    <?php
+                    printf("%s さん。のレシピ",$name,$id)
+                    ?>
+                </h2>
+            </p>
+            <p class="button">
+                <section>
+                    <a href="http://g079ff.php.xdomain.jp/logout.php" class="btn_03">ログアウト</a>
+                </section>
+            </p>
+        </div>
+    </header>
 
-
-			<h1>検索画面</h1>
-			<form action = "search_page.php" method = "post">
-			<input type="text" name="searchword" value="<?php echo $searchword ?>" placeholder="検索" class="form">
-			<input type="submit" value="検索">
-			</form>
-			<br><br><br>
-
-			<?php
-			if($_POST['searchword'] != NULL){ 
-					$word = $_POST['searchword'];
-
-					$dsn = 'mysql:host=157.112.147.201;
-							dbname=g079ff_2020';
-    				$user =  'g079ff_ymgc';
-				$pass = 'kpEYZ8KU';
-    			$option = [PDO::ATTR_EMULATE_PREPARES=>false];
-    			try{
-	    			$dbh = new PDO($dsn,$user,$pass);
-    			}catch(PDOException $e){
-	    			echo 'データベースにアクセスできません' . $e->getMessage();
-					exit;
-    			}
-
-				$sql = "SELECT * FROM post WHERE name LIKE '%$word%' OR id LIKE '%$word%' OR recipename LIKE '%$word%' OR recipecomment LIKE '%$word%'";
-       			$stmt = $dbh->query($sql);
-				$i = 0;
-				foreach($stmt as $row){
-					$postnum[$i] = $row['num']; $postname[$i] = $row['name'];
-					$postid[$i] = $row['id'];   $postdatetime[$i] = $row['datetime'];
-					$recipename[$i] = $row['recipename']; $recipecomment[$i] = $row['recipecomment'];
-					$calorie[$i] = $row['calorie']; $foodimage[$i] = $row['foodimage'];
-					$i++;
-				}
-			}
-			?>
-
-	        <?php for($k=($i-1);$k>=0;$k--){ ?>
-
-			<form method="post" action="detail_page.php">
-			<input type="hidden" name="key<?php echo $k ?>" value="<?php echo $recipename[$k] ?>">
-			<input type="hidden" name="sword" value="<?php echo $word ?>">
-			<input type="submit" value="レシピの詳細を見る">
-			</form>
-			
-            <table class="table" border="1">
+    <main>
+        <div class="localNavigation">
+            <table align="center">
                 <tr>
-                    <td><div class="text"><?php printf("レシピ名：%s",$recipename[$k]) ?></div></td>
-                    <td><div class="text"><?php printf("%sさんのレシピ",$postname[$k]) ?></div></td>
+                    <td><a href="http://g079ff.php.xdomain.jp/search_page.php" class="btn_02_a">検索</a></td>
                 </tr>
                 <tr>
-                    <td rowspan="2"><img src="foodimages/<?php echo $foodimage[$k] ?>" width="380"></td>
-                    <td><div class="text"><?php printf("推定カロリー：%s",$calorie[$k]) ?></div></td>
+                    <p>
+                    <td><a href="http://g079ff.php.xdomain.jp/myrecipe.php" class="btn_02_a">マイレシピ</a></td>
                 </tr>
                 <tr>
-                    <td><div class="text"><?php printf("コメント：%s ",$recipecomment[$k]) ?></div></td>
+                    <p>
+                    <td><a href="http://g079ff.php.xdomain.jp/mypage.php" class="btn_02_a">マイページ</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="content">
+                <table class="table" border="1">
+                <tr>
+                    <td><div class="text"><?php printf("レシピ名：%s",$recipename) ?></div></td>
+                    <td><div class="text"><?php printf("%sさんのレシピ",$postname) ?></div></td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><img src="foodimages/<?php echo $foodimage ?>" width="380" height="285"></td>
+                    <td><div class="text"><?php printf("推定カロリー：%s",$calorie) ?></div></td>
+                </tr>
+                <tr>
+                    <td><div class="text"><?php printf("コメント：%s ",$recipecomment) ?></div></td>
                 </tr>
             </table><br><br><br>
-            <?php } ?>
+            <table class="table" border="1">
+                <tr>
+                    <td><div class="text"><?php printf("材料名") ?></div></td>
+                    <td><div class="text"><?php printf("分量") ?></div></td>
+                </tr>
+                <?php for($i=1;$i<11;$i++){ 
+                        if(${volfood.$i} != 0){ ?>
+                <tr>
+                    <td><div class="text"><?php printf("材料$i ：%s",${food.$i}) ?></div></td>
+                    <td><div class="text"><?php printf("分量：%s",${volfood.$i}) ?></div></td>
+                </tr>
+                <?php    } 
+                        }?>
+            </table><br><br><br>
 
-		</div>
+            <form method="post" action="repost_page.php">
+			<input type="hidden" name="key" value="<?php echo $recipename ?>">
+			<input type="submit" value="レシピを編集する">
+			</form>
+        </div>
     </main>
-
 </body>
 </html>

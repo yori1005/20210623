@@ -2,31 +2,54 @@
 session_start();
 $id = $_SESSION['id'];
 $name = $_SESSION['name'];
-
-$dsn = 'mysql:host=157.112.147.201;
-        dbname=g079ff_2020';
-$user =  'g079ff_ymgc';
-$pass = 'kpEYZ8KU';
+$key = $_POST['key'];
+$dsn='mysql:host=157.112.147.201;
+     dbname=g079ff_2020' ;
+$user='g079ff_ymgc' ;
+$pass='kpEYZ8KU' ;
 try {
-    $dbh = new PDO($dsn, $user, $pass);
+    $dbh=new PDO($dsn, $user, $pass);
 } catch (PDOException $e) {
-    echo $e->getMessage();
-}
-$sql = "SELECT * FROM user WHERE id = '$id'";
-$stmt = $dbh->query($sql);
-foreach($stmt as $row){
-	$dbimage = $row['image'];
-}
-?>
+    echo $e->
+    getMessage();
+    }
 
-<!DOCTYPE html>
+    $sql = "SELECT * FROM post WHERE recipename = '$key' AND id = '$id'";
+    $stmt = $dbh->query($sql);
+    $i = 0;
+    foreach($stmt as $row){
+    $postnum = $row['num']; $postname = $row['name'];
+    $postid = $row['id'];   $postdatetime = $row['datetime'];
+    $recipename = $row['recipename']; $recipecomment = $row['recipecomment'];
+    $calorie = $row['calorie']; $foodimage = $row['foodimage'];
+    $i++;
+    }
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-    <style>
- 		body {
+    $sql = "SELECT * FROM foodstuff WHERE recipename = '$key' AND id = '$id'";
+    $stmt = $dbh->query($sql);
+    $i = 0;
+    foreach($stmt as $row){
+    $food1 = $row['food1']; $volfood1 = $row['volfood1'];
+    $food2 = $row['food2']; $volfood2 = $row['volfood2'];
+    $food3 = $row['food3']; $volfood3 = $row['volfood3'];
+    $food4 = $row['food4']; $volfood4 = $row['volfood4'];
+    $food5 = $row['food5']; $volfood5 = $row['volfood5'];
+    $food6 = $row['food6']; $volfood6 = $row['volfood6'];
+    $food7 = $row['food7']; $volfood7 = $row['volfood7'];
+    $food8 = $row['food8']; $volfood8 = $row['volfood8'];
+    $food9 = $row['food9']; $volfood9 = $row['volfood9'];
+    $food10 = $row['food10']; $volfood10 = $row['volfood10'];
+    }
+
+    ?>
+    <!DOCTYPE html>
+
+    <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+		body {
             margin: 0 auto;
             width: 100%;
         }
@@ -45,15 +68,34 @@ foreach($stmt as $row){
         .table{
             width: 100%;
             display: table;
+            table-layout: fixed;
         }
         .table td{
             word-wrap: break-word;
-			flex-shrink: 0;
         }
 
 		.form {
 			height: 30px;
-			width: 500px;
+			width: 300px;
+			padding: 0 16px;
+			border-radius: 4px;
+			border: none;
+			box-shadow: 0 0 0 1px #ccc inset;
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			font-size: 20px;
+			text-align: center;
+		}
+
+		.form:focus {
+			outline: 0;
+			box-shadow: 0 0 0 2px rgb(33, 150, 243) inset;
+		}
+
+        .form {
+			height: 30px;
+			width: 300px;
 			padding: 0 16px;
 			border-radius: 4px;
 			border: none;
@@ -234,9 +276,9 @@ foreach($stmt as $row){
             background-color: #888;
             color: #fff;
         }
-    </style>
-</head>
-	<body>
+        </style>
+    </head>
+    <body>
 
         <header class="grovalNavigation">
             <div class="title">
@@ -272,15 +314,19 @@ foreach($stmt as $row){
                 </table>
             </div>
             <div class="content">
-				<div class="text">
-					<?php printf("%sさんのプロフィール画像を設定できます。ID:%s",$name,$id); ?>
-			</div><br>
+			<h1>
+				<?php
+					printf("投稿の編集");
+				?>
+			</h1>
+			<table class="table" border="1">
+				
+                <div class="text">変更前の画像：</div>
+                <img src="foodimages/<?php echo $foodimage ?>" width="400" height="300">
+				<form action="repostmenu.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="imagename" value="<?php echo $foodimage ?>">
 
-            <div class="text">変更前の画像：</div>
-                <img src="images/<?php echo $dbimage ?>" width="400" height="300">
-				<form action="changeicon.php" method="post" enctype="multipart/form-data">
-
-				<div class="text">プロフィール画像の選択</div>
+				<div class="text">料理の写真</div>
 				<input type="file" name="image"  onchange="previewImage(this);">
 				<p>
 				<div class="text">変更後の画像：</div>
@@ -295,10 +341,63 @@ foreach($stmt as $row){
 						fileReader.readAsDataURL(obj.files[0]);
 					}
 				</script>
-				<input type="submit" value="変更" class="submitbutton">
-			<br><br><br>
+				<br><br><br>
+				<tr>	
+					<td><div class="text">料理の名前</div></td>
+					<td><input type="text" name="foodname"  class="form" value="<?php echo $recipename ?>"></td>
+				</tr>
+				<tr>
+					<td><div class="text">レシピの概要</div></td>
+					<td><textarea name="foodcomment" rows="8" cols="40"><?php echo $recipecomment ?></textarea></td>
+				</tr>
+				<tr>
+					<td><div class="text">ここから材料を選んでください→</div></td>
+					<td><a href="javascript:void(0);" onclick="openwin();"><div class="text">材料の選択</div></a></td>
+				</tr>
+				<tr><td colspan="2"><div class="text2">※食材を手動で入力するとカロリーが計算できません</div></td></tr>
+				<tr>
+					<td><div class="text">材料1：</div><input type="text" name ="postfood1" id="postfood1" value="<?php echo $food1 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood1" placeholder="(例)100" value="<?php echo $volfood1 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料2：</div><input type="text" name ="postfood2" id="postfood2" value="<?php echo $food2 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood2" placeholder="(例)100" value="<?php echo $volfood2 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料3：</div><input type="text" name ="postfood3" id="postfood3" value="<?php echo $food3 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood3" placeholder="(例)100" value="<?php echo $volfood3 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料4：</div><input type="text" name ="postfood4" id="postfood4" value="<?php echo $food4 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood4" placeholder="(例)100" value="<?php echo $volfood4 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料5：</div><input type="text" name ="postfood5" id="postfood5" value="<?php echo $food5 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood5" placeholder="(例)100" value="<?php echo $volfood5 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料6：</div><input type="text" name ="postfood6" id="postfood6" value="<?php echo $food6 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood6" placeholder="(例)100" value="<?php echo $volfood6 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料7：</div><input type="text" name ="postfood7" id="postfood7" value="<?php echo $food7 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood7" placeholder="(例)100" value="<?php echo $volfood7 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料8：</div><input type="text" name ="postfood8" id="postfood8" value="<?php echo $food8 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood8" placeholder="(例)100" value="<?php echo $volfood8 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料9：</div><input type="text" name ="postfood9" id="postfood9" value="<?php echo $food9 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood9" placeholder="(例)100" value="<?php echo $volfood9 ?>" class="form"><label>g</label></td>
+				</tr>
+				<tr>
+					<td><div class="text">材料10：</div><input type="text" name ="postfood10" id="postfood10"  value="<?php echo $food10 ?>" class="form"></td><td><label><div class="text">分量：</div></label><input type="text" name="volfood10" placeholder="(例)100" value="<?php echo $volfood10 ?>" class="form"><label>g</label></td>
+				</tr>	
+					<tr><td colspan="2"><input type="submit" value="編集内容の確定" class="submitbutton"></td></tr>
+					</form>
+			</table>
+			<script>
+				function openwin(){
+					window.open("./post_food.php","使用食材の選択","width=500,height=400")
+				}
+			</script>
+			<br><br>
 			<section>
 				<a href="http://g079ff.php.xdomain.jp/mypage.php" class="btn_03">マイページに戻る</a>
 			</section><p>
-	</body>
+            </div>
+        </main>
+    </body>
 </html>
