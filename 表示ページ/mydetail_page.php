@@ -64,7 +64,7 @@ foreach($stmt as $row){
 
         .text {
             text-align: center;
-            font-size: 20px;
+            font-size: 25px;
         }
 
         .table{

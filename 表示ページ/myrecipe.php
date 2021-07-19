@@ -43,7 +43,7 @@ foreach($stmt as $row){
 
         .text {
             text-align: center;
-            font-size: 20px;
+            font-size: 25px;
         }
 
         .table{
@@ -76,19 +76,18 @@ foreach($stmt as $row){
         }
 
         a.btn_03 {
-            display: flex;
-            justify-content: center;
+			justify-content: center;
             align-items: center;
-            width: 300px;
-            height: 50px;
+            width: 400px;
+            height: 100px;
             position: relative;
-            background: #228bc8;
-            border: 1px solid #228bc8;
+            background: #FF4500;
+            border: 1px solid #FF4500;
             border-radius: 30px;
             box-sizing: border-box;
             padding: 0 45px 0 25px;
             color: #fff;
-            font-size: 16px;
+            font-size: 25px;
             letter-spacing: 0.1em;
             line-height: 1.3;
             text-align: left;
@@ -251,13 +250,15 @@ foreach($stmt as $row){
             </table>
         </div>
         <div class="content">
-            <a href="http://g079ff.php.xdomain.jp/post_page.php" class="btn_03">レシピを投稿する</a><p>
+            <a href="http://g079ff.php.xdomain.jp/post_page.php" class="btn_03">レシピを投稿する</a>
+			<br><br><br><br>
             <?php for($k=($i-1);$k>=0;$k--){ ?>
 
 			<form method="post" action="mydetail_page.php">
 			<input type="hidden" name="key<?php echo $k ?>" value="<?php echo $recipename[$k] ?>">
 			<input type="submit" value="レシピの詳細を見る" class="submitbutton">
 			</form>
+			<br>
 			
             <table class="table" border="1">
                 <tr>

@@ -23,7 +23,7 @@ $searchword = $_POST['searchword'];
 
         .text {
             text-align: center;
-            font-size: 20px;
+            font-size: 25px;
         }
 
         .table{
@@ -45,7 +45,7 @@ $searchword = $_POST['searchword'];
 			appearance: none;
 			-webkit-appearance: none;
 			-moz-appearance: none;
-			font-size: 20px;
+			font-size: 25px;
 			text-align: center;
 		}
 
